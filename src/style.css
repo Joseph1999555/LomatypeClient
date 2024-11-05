@@ -1,0 +1,358 @@
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+}
+
+.logo {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.timer,
+.user-icon {
+    margin-left: 20px;
+    font-size: 1.2em;
+}
+
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.selectors {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.textarea-container {
+    position: relative;
+    width: 100%;
+}
+
+.content {
+    flex: 1;
+    padding: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+select {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+.formatted-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 1.2em;
+    line-height: 1.5;
+    color: black;
+    pointer-events: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    z-index: 1;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    font-family: monospace;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    color: transparent;
+    caret-color: black;
+    background-color: transparent;
+    position: absolute;
+    z-index: 2;
+}
+
+textarea:focus {
+    outline: 1px solid #007bff;
+}
+
+.typing-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.background-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 1.2em;
+    color: rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.typing-area textarea {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 1.2em;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+    line-height: 1.5;
+}
+
+.typing-area textarea::placeholder {
+    color: transparent;
+}
+
+.typing-area textarea::before {
+    content: attr(data-snippet);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 1.2em;
+    color: rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+h2 {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+pre.result {
+    background-color: #f9f9f9;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.2em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.correct {
+    color: green;
+}
+
+.placeholder {
+    color: gray;
+}
+
+.incorrect {
+    color: red;
+}
+
+.logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}
+
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    display: none;
+}
+
+.notification.show {
+    display: block;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+thead th {
+    padding: 12px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+tbody td {
+    padding: 12px 15px;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d32f2f;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    height: 100vh;
+    z-index: 1;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.module-group {
+    margin-bottom: 20px;
+}
+
+.module-group h3 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.module-group ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.module-group li {
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.2s;
+}
+
+.module-group li:hover {
+    background-color: #ddd;
+}
+
+.module-group.active {
+    background-color: #ccc;
+    font-weight: bold;
+}

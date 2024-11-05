@@ -1,13 +1,70 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.dropdown {
+  scale: 0.75;
+  transform-origin: 50% 50%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+button {
+  cursor: pointer;
+}
+
+.dropdown-1 {
+  position: relative;
+}
+
+.dropdown-1 button {
+  height: 36px;
+  width: 100%;
+  padding: 0 0 0 12px;
+  border-radius: 6px;
+  border: 0;
+  background: #222222;
+  color: #f9f9f9;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.dropdown-1 > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #8f44fd;
+  border-right: 0;
+}
+
+.dropdown-1 > button > p {
+  white-space: nowrap;
+}
+
+.dropdown-1 > button > span {
+  border: 1px solid #8f44fd;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  height: 34px;
+  width: 36px;
+  min-width: 0;
+  min-width: 36px;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.dropdown-1 .menu {
+  position: absolute;
+  z-index: 10;
+  top: 48px;
+  background: #222222;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+
+.dropdown-1:hover .menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-1 .menu button {
+  background: transparent;
+  border: 0;
+  color: #f9f9f9;
 }
