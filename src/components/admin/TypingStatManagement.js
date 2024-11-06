@@ -14,7 +14,7 @@ const TypingStatManagement = () => {
     const fetchTypingStats = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:3005/admin/fetch/alltypingstats`, {
+            const response = await axios.get(`https://lomatypeserver.onrender.com/admin/fetch/alltypingstats`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -29,7 +29,7 @@ const TypingStatManagement = () => {
     const deleteTypingStat = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3005/admin/delete/typingstat/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/typingstat/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

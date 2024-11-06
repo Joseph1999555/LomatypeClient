@@ -11,7 +11,7 @@ const DifficultySelection = ({ selectedLanguage, selectedType, setSelectedDiffic
     const fetchDifficulties = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3005/user/fetch/difficulties', {
+            const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/difficulties', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

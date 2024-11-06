@@ -7,7 +7,7 @@ const Leaderboard = () => {
 
     const fetchLeaderboard = async () => {
         try {
-            const response = await axios.get('http://localhost:3005/user/fetch/leaderboard');
+            const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/leaderboard');
             setLeaderboard(response.data);
             console.log(response.data);
         } catch (error) {

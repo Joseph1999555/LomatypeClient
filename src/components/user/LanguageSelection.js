@@ -11,7 +11,7 @@ const LanguageSelection = ({ setSelectedLanguage }) => {
     const fetchLanguages = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3005/user/fetch/languages', {
+            const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/languages', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3005/auth/forgot-password', { email });
+      const response = await axios.post('https://lomatypeserver.onrender.com/auth/forgot-password', { email });
       if (response.status === 200) {
         setMessage('Please check your email for the verification code.');
         setShowCodeInput(true);
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
   const handleCodeSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3005/auth/verify-reset-code', { email, code });
+      const response = await axios.post('https://lomatypeserver.onrender.com/auth/verify-reset-code', { email, code });
       if (response.status === 200) {
         setMessage('Verification successful! Redirecting to reset password page...');
         setTimeout(() => navigate(`/reset-password/${response.data.token}`), 3000);

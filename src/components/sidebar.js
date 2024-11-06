@@ -16,7 +16,7 @@ const Sidebar = ({ selectedLanguage, selectedType, onLanguageSelect, onTypeSelec
 
   const fetchLanguages = async () => {
     try {
-      const response = await axios.get('http://localhost:3005/user/fetch/languages');
+      const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/languages');
       setLanguages(response.data);
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการดึงข้อมูลภาษา:', error);
@@ -25,7 +25,7 @@ const Sidebar = ({ selectedLanguage, selectedType, onLanguageSelect, onTypeSelec
 
   const fetchTypes = async () => {
     try {
-      const response = await axios.get('http://localhost:3005/user/fetch/types');
+      const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/types');
       setTypes(response.data);
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการดึงข้อมูลประเภท:', error);
@@ -34,7 +34,7 @@ const Sidebar = ({ selectedLanguage, selectedType, onLanguageSelect, onTypeSelec
 
   const fetchModules = async () => {
     try {
-      const response = await axios.get('http://localhost:3005/user/fetch/modules');
+      const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/modules');
       setModules(response.data);
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการดึงข้อมูลโมดูล:', error);

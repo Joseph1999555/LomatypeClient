@@ -17,7 +17,7 @@ const TypeManagement = () => {
             const token = localStorage.getItem('token');
 
             // Fetch all modules
-            const modulesResponse = await axios.get('http://localhost:3005/admin/fetch/modules', {
+            const modulesResponse = await axios.get('https://lomatypeserver.onrender.com/admin/fetch/modules', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -25,7 +25,7 @@ const TypeManagement = () => {
             setModules(modulesResponse.data);
 
             // Fetch all types
-            const typesResponse = await axios.get('http://localhost:3005/admin/fetch/types', {
+            const typesResponse = await axios.get('https://lomatypeserver.onrender.com/admin/fetch/types', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -44,7 +44,7 @@ const TypeManagement = () => {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3005/admin/create/type',
+            await axios.post('https://lomatypeserver.onrender.com/admin/create/type',
                 {
                     name: newType,
                     module_id: selectedModule,
@@ -68,7 +68,7 @@ const TypeManagement = () => {
     const updateType = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:3005/admin/update/type/${id}`, { type_name: editTypeValue }, {
+            await axios.put(`https://lomatypeserver.onrender.com/admin/update/type/${id}`, { type_name: editTypeValue }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -84,7 +84,7 @@ const TypeManagement = () => {
     const deleteType = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3005/admin/delete/type/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/type/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

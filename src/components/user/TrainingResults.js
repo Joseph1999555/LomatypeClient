@@ -10,7 +10,7 @@ const TrainingResults = () => {
   const fetchTypingStats = async () => {
     try {
       const token = localStorage.getItem("token"); // ดึง token ที่เก็บไว้ใน localStorage
-      const response = await axios.get("http://localhost:3005/user/fetch/typingstats", {
+      const response = await axios.get("https://lomatypeserver.onrender.com/user/fetch/typingstats", {
         headers: {
           Authorization: `Bearer ${token}`, // ส่ง token เพื่อยืนยันตัวตน
         },

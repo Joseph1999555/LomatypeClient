@@ -38,7 +38,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3005/auth/login', formData);
+      const response = await axios.post('https://lomatypeserver.onrender.com/auth/login', formData);
       if (response.status === 200) {
         const { token } = response.data;
 
@@ -63,7 +63,7 @@ const Login = () => {
 
   const loginWithGoogle = () => {
     // Redirect ไปยังหน้า Google Auth โดยตรง
-    window.location.href = 'http://localhost:3005/auth/google';
+    window.location.href = 'https://lomatypeserver.onrender.com/auth/google';
   };
   const switchToRegister = () => {
     navigate('/register');
@@ -108,12 +108,14 @@ const Login = () => {
 
             <button type="submit" className="btn btnPrimary">Login</button>
           </form>
-          <p className="registerText">
-            Don't have an account? <button onClick={switchToRegister} className="btn btnLink">Register here</button>
-          </p>
-          <p className="registerText">
-            <button onClick={switchToForgotPassword} className="btn btnLink">Forgot password?</button>
-          </p>
+          <div className="footerOptions">
+        <p className="registerText">
+          Don't have an account? <button onClick={switchToRegister} className="btn btnLink">Register here</button>
+        </p>
+        <p className="ForgotText">
+          <button onClick={switchToForgotPassword} className="btn btnLink">Forgot password?</button>
+        </p>
+      </div>
           <button onClick={loginWithGoogle} className="btn btnGoogle">
           <img src="/asset/google.png" alt="Google Icon" className="googleIcon" />
             Sign in with Google
@@ -255,6 +257,20 @@ const Login = () => {
             margin-top: 20px;
             color: #F2D8E1; /* Pink */
             font-size: 1.2rem;
+          }
+
+          .ForgotText {
+            margin-top: 20px;
+            
+            color: #F2D8E1; /* Pink */
+            font-size: 1.2rem;
+          }
+
+          .footerOptions {
+            display: flex;
+            justify-content: space-between; /* จัดข้อความไว้คนละฝั่ง */
+            align-items: center;
+            margin-top: 20px;
           }
 
           .btnGoogle {

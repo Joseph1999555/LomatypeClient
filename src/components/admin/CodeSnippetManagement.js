@@ -30,7 +30,7 @@ const CodeSnippetManagement = () => {
         }
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3005/admin/create/snippet', newSnippet, {
+            await axios.post('https://lomatypeserver.onrender.com/admin/create/snippet', newSnippet, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -52,7 +52,7 @@ const CodeSnippetManagement = () => {
     const deleteSnippet = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3005/admin/delete/snippet/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/snippet/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -67,11 +67,11 @@ const CodeSnippetManagement = () => {
     const getAllData = async () => {
         const token = localStorage.getItem('token');
         Promise.all([
-            axios.get('http://localhost:3005/admin/fetch/snippets', { headers: { Authorization: `Bearer ${token}` } }),
-            axios.get('http://localhost:3005/admin/fetch/languages', { headers: { Authorization: `Bearer ${token}` } }),
-            axios.get('http://localhost:3005/admin/fetch/modules', { headers: { Authorization: `Bearer ${token}` } }),
-            axios.get('http://localhost:3005/admin/fetch/types', { headers: { Authorization: `Bearer ${token}` } }),
-            axios.get('http://localhost:3005/admin/fetch/difficulties', { headers: { Authorization: `Bearer ${token}` } }),
+            axios.get('https://lomatypeserver.onrender.com/admin/fetch/snippets', { headers: { Authorization: `Bearer ${token}` } }),
+            axios.get('https://lomatypeserver.onrender.com/admin/fetch/languages', { headers: { Authorization: `Bearer ${token}` } }),
+            axios.get('https://lomatypeserver.onrender.com/admin/fetch/modules', { headers: { Authorization: `Bearer ${token}` } }),
+            axios.get('https://lomatypeserver.onrender.com/admin/fetch/types', { headers: { Authorization: `Bearer ${token}` } }),
+            axios.get('https://lomatypeserver.onrender.com/admin/fetch/difficulties', { headers: { Authorization: `Bearer ${token}` } }),
         ])
             .then(([snippetsRes, languagesRes, modulesRes, typesRes, difficultiesRes]) => {
                 setSnippets(snippetsRes.data);
@@ -206,7 +206,7 @@ const CodeSnippetManagement = () => {
         }
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:3005/admin/update/snippet/${snippetId}`, editingSnippet, {
+            await axios.put(`https://lomatypeserver.onrender.com/admin/update/snippet/${snippetId}`, editingSnippet, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

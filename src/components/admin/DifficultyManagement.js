@@ -12,7 +12,7 @@ const DifficultyManagement = () => {
     const fetchDifficulties = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3005/admin/fetch/difficulties', {
+            const response = await axios.get('https://lomatypeserver.onrender.com/admin/fetch/difficulties', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -26,7 +26,7 @@ const DifficultyManagement = () => {
     const addDifficulty = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3005/admin/create/difficulty', {
+            await axios.post('https://lomatypeserver.onrender.com/admin/create/difficulty', {
                 name: newDifficulty,
             }, {
                 headers: {
@@ -43,7 +43,7 @@ const DifficultyManagement = () => {
     const updateDifficulty = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:3005/admin/update/difficulty/${id}`, {
+            await axios.put(`https://lomatypeserver.onrender.com/admin/update/difficulty/${id}`, {
                 name: editDifficultyValue,
             }, {
                 headers: {
@@ -61,7 +61,7 @@ const DifficultyManagement = () => {
     const deleteDifficulty = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3005/admin/delete/difficulty/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/difficulty/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -11,7 +11,7 @@ const TypeSelection = ({ selectedModule, setSelectedType }) => {
     const fetchTypes = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3005/user/fetch/types', {
+            const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/types', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

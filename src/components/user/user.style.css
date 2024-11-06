@@ -7,7 +7,7 @@ body {
     background-image: url('../../../public/asset/background09.png');
     /* แทนที่ด้วยชื่อไฟล์ที่ถูกต้อง */
     background-size: cover;
-    background-position: absolute;
+    background-position: fixed;
     background-repeat: no-repeat;
     background-color: #e0f7fa;
     padding-left: 40px;

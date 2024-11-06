@@ -12,7 +12,7 @@ const UserManagement = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token'); // Get token from localStorage
-            const response = await axios.get('http://localhost:3005/admin/fetch/users', {
+            const response = await axios.get('https://lomatypeserver.onrender.com/admin/fetch/users', {
                 headers: {
                     'Authorization': `Bearer ${token}` // Send token in header
                 }
@@ -33,7 +33,7 @@ const UserManagement = () => {
     const deleteUser = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3005/admin/delete/user/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/user/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

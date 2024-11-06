@@ -18,7 +18,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3005/auth/register', formData);
+      const response = await axios.post('https://lomatypeserver.onrender.com/auth/register', formData);
       console.log('response:', response);
       if (response.status === 200) {
         navigate('/login'); // หลังจากลงทะเบียนเสร็จ กลับไปที่หน้า login

@@ -17,7 +17,7 @@ const ResetPassword = () => {
       return;
     }
     try {
-      const response = await axios.post(`http://localhost:3005/auth/reset-password/${token}`, { password });
+      const response = await axios.post(`https://lomatypeserver.onrender.com/auth/reset-password/${token}`, { password });
       if (response.status === 200) {
         setMessage('Password reset successful! Please log in.');
         setTimeout(() => navigate('/login'), 3000);

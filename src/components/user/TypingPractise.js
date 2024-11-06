@@ -32,7 +32,7 @@ const TypingPractice = ({ selectedLanguage, selectedType, setSelectedLanguage, s
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:3005/user/fetch/snippet2?language=${language._id}&type=${type._id}&difficulty=${difficulty._id}`, {
+      const response = await axios.get(`https://lomatypeserver.onrender.com/user/fetch/snippet2?language=${language._id}&type=${type._id}&difficulty=${difficulty._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -59,7 +59,7 @@ const TypingPractice = ({ selectedLanguage, selectedType, setSelectedLanguage, s
   const fetchDifficulties = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3005/user/fetch/difficulties', {
+      const response = await axios.get('https://lomatypeserver.onrender.com/user/fetch/difficulties', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -263,7 +263,7 @@ const TypingPractice = ({ selectedLanguage, selectedType, setSelectedLanguage, s
         return;
       }
 
-      const response = await axios.post('http://localhost:3005/user/create/typingstat', {
+      const response = await axios.post('https://lomatypeserver.onrender.com/user/create/typingstat', {
         user_id: userId,
         code_snippet_id: snippetId,
         typing_speed: wpm,           // WPM ที่คำนวณจากการพิมพ์

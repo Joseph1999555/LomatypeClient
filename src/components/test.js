@@ -1,394 +1,359 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import styles from './Admin.module.css';
+<style>{`
+	.match-making-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 20px;
+	}
 
-const CodeSnippetManagement = () => {
-    const [snippets, setSnippets] = useState([]);
-    const [languages, setLanguages] = useState([]);
-    const [modules, setModules] = useState([]);
-    const [types, setTypes] = useState([]);
-    const [difficulties, setDifficulties] = useState([]);
-    const [filteredTypes, setFilteredTypes] = useState([]);
-    const [newSnippet, setNewSnippet] = useState({
-        language_id: '',
-        module_id: '',
-        type_id: '',
-        difficulty_id: '',
-        snippet_text: '',
-        result: ''
-    });
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // เปิดปิด Modal
-    const [editingSnippet, setEditingSnippet] = useState(null); // เก็บข้อมูล snippet ที่กำลังแก้ไข
-    const [snippetId, setSnippetId] = useState(null);
+	.match-making, .matchmaking {
+		margin: 20px 0;
+		padding: 20px;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		width: 100%;
+		max-width: 800px;
+		background-color: #f9f9f9;
+	}
 
+	.code-snippet {
+		margin: 20px 0;
+		padding: 10px;
+		font-size: 1.2em;
+		background-color: #e0e0e0;
+		border-radius: 5px;
+	}
 
-    const navigate = useNavigate();
+	.players {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 20px;
+		gap: 20px;
+	}
 
+	.typing-area {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 45%;
+	}
 
-    const addSnippet = async () => {
-        if (!newSnippet.language_id || !newSnippet.module_id || !newSnippet.type_id || !newSnippet.difficulty_id || !newSnippet.snippet_text) {
-            alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
-            return;
-        }
-        try {
-            const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3005/admin/create/snippet', newSnippet, {
-                headers: {
-                    'Authorization': Bearer ${token}
-                }
-            });
-            getAllData();
-            setNewSnippet({
-                language_id: '',
-                module_id: '',
-                type_id: '',
-                difficulty_id: '',
-                snippet_text: '',
-                result: ''
-            });
-        } catch (error) {
-            console.error('Error adding code snippet:', error);
-        }
-    };
+	.typing-area textarea {
+		width: 100%;
+		height: 200px;
+		padding: 10px;
+		font-family: monospace;
+		font-size: 1em;
+		background-color: #fff;
+		border: 1px solid #007bff;
+		border-radius: 5px;
+		resize: none;
+	}
 
-    const deleteSnippet = async (id) => {
-        try {
-            const token = localStorage.getItem('token');
-            await axios.delete(http://localhost:3005/admin/delete/snippet/${id}, {
-                headers: {
-                    'Authorization': Bearer ${token}
-                }
-            });
-            console.log(Snippet with ID ${id} deleted);
-            getAllData();
-        } catch (error) {
-            console.error('Error deleting snippet:', error);
-        }
-    };
+	.formatted-text {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 10px;
+		font-family: monospace;
+		font-size: 1em;
+		color: black;
+		pointer-events: none;
+	}
 
-    const getAllData = async () => {
-        const token = localStorage.getItem('token');
-        Promise.all([
-            axios.get('http://localhost:3005/admin/fetch/snippets', { headers: { Authorization: Bearer ${token} } }),
-            axios.get('http://localhost:3005/admin/fetch/languages', { headers: { Authorization: Bearer ${token} } }),
-            axios.get('http://localhost:3005/admin/fetch/modules', { headers: { Authorization: Bearer ${token} } }),
-            axios.get('http://localhost:3005/admin/fetch/types', { headers: { Authorization: Bearer ${token} } }),
-            axios.get('http://localhost:3005/admin/fetch/difficulties', { headers: { Authorization: Bearer ${token} } }),
-        ])
-            .then(([snippetsRes, languagesRes, modulesRes, typesRes, difficultiesRes]) => {
-                setSnippets(snippetsRes.data);
-                setLanguages(languagesRes.data);
-                setModules(modulesRes.data);
-                setTypes(typesRes.data);
-                setDifficulties(difficultiesRes.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    };
+	button {
+		padding: 10px 20px;
+		border: none;
+		border-radius: 4px;
+		background-color: #007bff;
+		color: #fff;
+		cursor: pointer;
+		font-size: 1em;
+		transition: background-color 0.3s;
+	}
 
-    const handleModuleChange = (e) => {
-        const selectedModuleId = e.target.value;
-        setNewSnippet({ ...newSnippet, module_id: selectedModuleId, type_id: '' });
-        setFilteredTypes(types.filter((type) => type.module_id._id === selectedModuleId));
-    };
+	button:disabled {
+		background-color: #ccc;
+		cursor: not-allowed;
+	}
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            const { selectionStart, selectionEnd, value } = e.target;
-            const newValue = value.substring(0, selectionStart) + '\t' + value.substring(selectionEnd);
-            
-            // ปรับให้แน่ใจว่าได้ตั้งค่าตาม snippet ที่ต้องการ
-            if (e.target.placeholder === "โค้ด") {
-                setNewSnippet({ ...newSnippet, snippet_text: newValue });
-            } else {
-                setEditingSnippet({ ...editingSnippet, snippet_text: newValue });
-            }
-    
-            e.target.selectionStart = e.target.selectionEnd = selectionStart + 1;
-        }
-    };
+	button:hover:not(:disabled) {
+		background-color: #0056b3;
+	}
 
-    const navigateDashboard = () => {
-        navigate('/admin');
-    };
+	.modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+	}
 
-    useEffect(() => {
-        getAllData();
-    }, []);
+	.modal-content {
+		background: white;
+		padding: 20px;
+		border-radius: 8px;
+		width: 80%;
+		max-width: 500px;
+		text-align: center;
+	}
 
-    const [currentPage, setCurrentPage] = useState(1); // หน้าที่กำลังแสดง
-    const rowsPerPage = 10; // จำนวนแถวที่จะแสดงต่อหน้า
+	.modal-content h2 {
+		font-size: 1.5em;
+		margin-bottom: 15px;
+	}
 
-    const indexOfLastSnippet = currentPage * rowsPerPage;
-    const indexOfFirstSnippet = indexOfLastSnippet - rowsPerPage;
-    const currentSnippets = snippets.slice(indexOfFirstSnippet, indexOfLastSnippet);
-    const totalPages = Math.ceil(snippets.length / rowsPerPage);
+	.stats p {
+		margin: 8px 0;
+	}
 
-    const paginate = (pageNumber) => {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
-    };
-
-    const renderPageNumbers = () => {
-        const pageNumbers = [];
-
-        // เพิ่มปุ่มไปหน้าแรก <<
-        if (currentPage > 1) {
-            pageNumbers.push(
-                <button key="first" onClick={() => paginate(1)}>{'<<'}</button>
-            );
-        }
-
-        // ปุ่มย้อนกลับ <
-        if (currentPage > 1) {
-            pageNumbers.push(
-                <button key="prev" onClick={() => paginate(currentPage - 1)}>{'<'}</button>
-            );
-        }
-
-        // ถ้าหน้าปัจจุบันเกิน 3 แสดง ... ก่อนเลขหน้า
-        if (currentPage > 3) {
-            pageNumbers.push(<span key="dots-prev">...</span>);
-        }
-
-        // แสดงเลขหน้าใกล้กับหน้าปัจจุบัน (สูงสุด 3 หน้า)
-        for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
-            pageNumbers.push(
-                <button
-                    key={i}
-                    onClick={() => paginate(i)}
-                    className={currentPage === i ? styles.activePage : ''}
-                >
-                    {i}
-                </button>
-            );
-        }
-
-        // ถ้ามีหน้ามากกว่า 3 และไม่ได้อยู่ท้ายสุด แสดง ... หลังเลขหน้า
-        if (currentPage < totalPages - 2) {
-            pageNumbers.push(<span key="dots-next">...</span>);
-        }
-
-        // ปุ่มหน้าถัดไป >
-        if (currentPage < totalPages) {
-            pageNumbers.push(
-                <button key="next" onClick={() => paginate(currentPage + 1)}>{'>'}</button>
-            );
-        }
-
-        // เพิ่มปุ่มไปหน้าสุดท้าย >>
-        if (currentPage < totalPages) {
-            pageNumbers.push(
-                <button key="last" onClick={() => paginate(totalPages)}>{'>>'}</button>
-            );
-        }
-
-        return pageNumbers;
-    };
-
-    const openEditModal = (snippet) => {
-        setSnippetId(snippet);
-        const snippetToEdit = snippets.find(s => s._id === snippet);
-        setEditingSnippet(snippetToEdit); // เซ็ตข้อมูล snippet ที่ต้องการแก้ไข
-        setIsEditModalOpen(true);   // เปิด Modal
-    };
-
-    const closeEditModal = () => {
-        setIsEditModalOpen(false);  // ปิด Modal
-        setEditingSnippet(null);    // ล้างข้อมูล snippet ที่กำลังแก้ไข
-    };
-
-    const updateSnippet = async () => {
-        if (!editingSnippet.snippet_text || !editingSnippet.result) {
-            alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-            return;
-        }
-        console.log('snippetId:', snippetId);
-        console.log('editingSnippet:', editingSnippet);
-        try {
-            const token = localStorage.getItem('token');
-            await axios.put(http://localhost:3005/admin/update/snippet/${snippetId}, editingSnippet, {
-                headers: {
-                    'Authorization': Bearer ${token}
-                }
-            });
-            getAllData(); // เรียกข้อมูลใหม่หลังจากอัปเดต
-            closeEditModal(); // ปิด Modal หลังจากอัปเดตเสร็จ
-        } catch (error) {
-            console.error('Error updating snippet:', error);
-        }
-    };
+	.modal-content button {
+		margin-top: 15px;
+		padding: 10px 20px;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+`}</style>
 
 
+////////////////////////
 
-    return (
-        <div className="pageContainer">
-            <div className={styles.container}>
-                <h1 className={styles.header}>การจัดการโค้ดฝึกพิมพ์</h1>
+{/* <style>{`
+	.match-making-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		text-align: relative;
+	}
 
-                <button className={styles.button} onClick={navigateDashboard}>Back To Dashbord</button>
+	.match-making, .matchmaking {
+		margin: 20px;
+		padding: 20px;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		width: 100%;
+		max-width: 1200px;
+		height: auto;
+		max-height: 1200px;
+	}
 
-                <div className={styles.section}>
-                    <h2>เพิ่มโค้ดใหม่</h2>
-                    <div className={styles.formGroup}>
-                        <select
-                            className={styles.select}
-                            value={newSnippet.language_id}
-                            onChange={(e) => setNewSnippet({ ...newSnippet, language_id: e.target.value })}
-                        >
-                            <option value="">เลือกภาษา</option>
-                            {languages.map((lang) => (
-                                <option key={lang._id} value={lang._id}>
-                                    {lang.language_name}
-                                </option>
-                            ))}
-                        </select>
+	.code-snippet {
+		margin: 20px;
+		padding: 10px;
+		font-size: 1.2em;
+		background-color: #f4f4f4;
+		border-radius: 5px;
+		overflow-x: auto;
+	}
 
-                        <select
-                            className={styles.select}
-                            value={newSnippet.module_id}
-                            onChange={handleModuleChange}
-                        >
-                            <option value="">เลือกโมดูล</option>
-                            {modules.map((mod) => (
-                                <option key={mod._id} value={mod._id}>
-                                    {mod.module_name}
-                                </option>
-                            ))}
-                        </select>
+	.players {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20px;
+		gap: 20px;
+		width: auto;
+	}
 
-                        <select
-                            className={styles.select}
-                            value={newSnippet.type_id}
-                            onChange={(e) => setNewSnippet({ ...newSnippet, type_id: e.target.value })}
-                            disabled={!newSnippet.module_id}
-                        >
-                            <option value="">เลือกประเภท</option>
-                            {filteredTypes.map((type) => (
-                                <option key={type._id} value={type._id}>
-                                    {type.type_name}
-                                </option>
-                            ))}
-                        </select>
+	.player {
+		flex: 1;
+		text-align: center;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		padding: 10px;
+	}
 
-                        <select
-                            className={styles.select}
-                            value={newSnippet.difficulty_id}
-                            onChange={(e) => setNewSnippet({ ...newSnippet, difficulty_id: e.target.value })}
-                        >
-                            <option value="">เลือกระดับความยาก</option>
-                            {difficulties.map((difficulty) => (
-                                <option key={difficulty._id} value={difficulty._id}>
-                                    {difficulty.difficult_level}
-                                </option>
-                            ))}
-                        </select>
+	.typing-area {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 100%;
+		height: 100%;
+	}
 
-                        <textarea
-                            className={styles.textarea}
-                            placeholder="โค้ด"
-                            value={newSnippet.snippet_text}
-                            onChange={(e) => setNewSnippet({ ...newSnippet, snippet_text: e.target.value })}
-                            onKeyDown={handleKeyDown}
-                        />
+	.typing-area textarea {
+		position: relative;
+		z-index: 2;
+		width: 100%;
+		height: 500px;
+		padding: 10px;
+		font-family: monospace;
+		font-size: 1.2em;
+		background-color: transparent;
+		border: 1px solid Darkblue;
+		border-radius: 5px;
+		resize: none;
+		line-height: 1.5;
+	}
 
-                        <textarea
-                            className={styles.textarea}
-                            placeholder="ผลลัพธ์ที่คาดหวัง"
-                            value={newSnippet.result}
-                            onChange={(e) => setNewSnippet({ ...newSnippet, result: e.target.value })}
-                        />
+	.typing-area textarea::placeholder {
+		color: transparent;
+	}
 
-                        <button className={styles.button} onClick={addSnippet}>เพิ่มโค้ด</button>
-                    </div>
-                </div>
+	.typing-area textarea::before {
+		content: attr(data-snippet);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		padding: 10px;
+		font-family: monospace;
+		font-size: 1.2em;
+		color: rgba(0, 0, 0, 0.1);
+		background-color: transparent;
+		border-radius: 5px;
+		white-space: pre-wrap;
+		overflow: auto;
+		pointer-events: none;
+		z-index: 1;
+	}
+		
+	.background-text {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 10px;
+		font-family: monospace;
+		font-size: 1.2em;
+		color: rgba(0, 0, 0, 0.3);
+		line-height: 1.5;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		pointer-events: none;
+		z-index: 1;
+	}
 
-                {/* Table showing snippets */}
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>ภาษา</th>
-                            <th>โมดูล</th>
-                            <th>ประเภท</th>
-                            <th>ระดับความยาก</th>
-                            <th>โค้ด</th>
-                            <th>ผลลัพธ์</th>
-                            <th>การดำเนินการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentSnippets.map((snippet, index) => (
-                            <tr key={snippet._id}>
-                                <td>{snippet.language_id?.language_name}</td>
-                                <td>{snippet.module_id?.module_name}</td>
-                                <td>{snippet.type_id?.type_name}</td>
-                                <td>{snippet.difficulty_id?.difficult_level}</td>
-                                <td><pre>{snippet.snippet_text}</pre></td>
-                                <td>{snippet.result}</td>
-                                <td>
-                                    <button onClick={() => openEditModal(snippet._id)} >แก้ไข</button>
-                                    <button className={styles.button} onClick={() => deleteSnippet(snippet._id)}>ลบ</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+	.textarea-container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
 
-                {isEditModalOpen && (
-                    <div className={styles.modal}>
-                        <div className={styles.modalContent}>
-                            <h2>แก้ไขโค้ดและผลลัพธ์</h2>
+	textarea {
+		width: 100%;
+		height: 100px;
+		padding: 8px;
+		resize: none;
+		border-radius: 5px;
+		border: 1px solid #ccc;
+		font-size: 1em;
+		background-color: #f9f9f9;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		font-family: 'Courier New', Courier, monospace;
+		line-height: 1.5;
+		color: transparent;
+	}
 
-                            <textarea
-                                className={styles.textarea}
-                                placeholder="โค้ด"
-                                value={editingSnippet.snippet_text}
-                                onChange={(e) => setEditingSnippet({ ...editingSnippet, snippet_text: e.target.value })}
-                                onKeyDown={handleKeyDown}
-                            />
+	.formatted-text {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 10px;
+		font-family: monospace;
+		font-size: 1.2em;
+		line-height: 1.5;
+		color: black;
+		pointer-events: none;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		z-index: 1;
+		
+	}
 
-                            <textarea
-                                className={styles.textarea}
-                                placeholder="ผลลัพธ์"
-                                value={editingSnippet.result}
-                                onChange={(e) => setEditingSnippet({ ...editingSnippet, result: e.target.value })}
-                            />
+	.snippet, .formatted-result {
+		font-family: monospace;
+		padding: 10px;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		font-size: 16px; /* ให้ฟอนต์เท่ากัน */
+		line-height: 1.5; /* ให้เว้นบรรทัดเท่ากัน */
+		}
 
-                            <button className={styles.button} onClick={updateSnippet}>บันทึก</button>
-                            <button className={styles.button} onClick={closeEditModal}>ยกเลิก</button>
-                        </div>
-                    </div>
-                )}
+		.snippet {
+		background-color: transparent;
+		border: 1px solid Darkblue;
+		z-index: 1;
+		}
 
+		.correct {
+		color: #1dc21a;
+		font-weight: bold;
+		}
 
-                {/* Pagination controls */}
-                <div className={styles.pagination}>
-                    {renderPageNumbers()}
-                </div>
+		.incorrect {
+		color: red;
+		font-weight: bold;
+		}
 
+		.placeholder {
+		color: #514a48;
+		font-weight: bold;
+		}
 
-                {/* Display results info */}
-                <p className={styles.resultsInfo}>
-                    {${indexOfFirstSnippet + 1}-${Math.min(indexOfLastSnippet, snippets.length)} of ${snippets.length} results}
-                </p>
-            </div>
-            <style>
-                {
-                .pageContainer {
-                    width: 100%;
-                    display: flex; 
-                    justify-content: center;
-                    align-items: center;
-                    min-height: 100vh;
-                }
-                }
-            </style>
-        </div>
-    );
-};
+		textarea::selection {
+		background: rgba(0, 0, 0, 0.1); /* Highlight selected text */
+		}
 
-export default CodeSnippetManagement;
+	button {
+		margin-top: 10px;
+		padding: 8px 16px;
+		border: none;
+		border-radius: 4px;
+		background-color: #007bff;
+		color: #fff;
+		cursor: pointer;
+		font-size: 1em;
+	}
+
+	button:disabled {
+		background-color: #ccc;
+		cursor: not-allowed;
+	}
+
+	.modal-overlay {
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.5);
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					z-index: 1000;
+				}
+				.modal-content {
+					background: white;
+					padding: 20px;
+					border-radius: 8px;
+					width: 80%;
+					max-width: 500px;
+					text-align: center;
+				}
+				.modal-content h2 {
+					font-size: 24px;
+					margin-bottom: 15px;
+				}
+				.stats p {
+					margin: 8px 0;
+				}
+				.modal-content button {
+					margin-top: 15px;
+					padding: 8px 16px;
+					background-color: #007bff;
+					color: white;
+					border: none;
+					border-radius: 4px;
+					cursor: pointer;
+				}
+`}</style> */}

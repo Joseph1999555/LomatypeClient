@@ -14,7 +14,7 @@ const ModuleManagement = () => {
     const fetchModules = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3005/admin/fetch/modules', {
+            const response = await axios.get('https://lomatypeserver.onrender.com/admin/fetch/modules', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -32,7 +32,7 @@ const ModuleManagement = () => {
         }
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:3005/admin/create/module', {
+            await axios.post('https://lomatypeserver.onrender.com/admin/create/module', {
                 name: newModule,
                 description: newModuleDescription,
             }, {
@@ -55,7 +55,7 @@ const ModuleManagement = () => {
         }
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:3005/admin/update/module/${id}`, {
+            await axios.put(`https://lomatypeserver.onrender.com/admin/update/module/${id}`, {
                 name: editModuleValue,
                 description: editModuleDescription,
             }, {
@@ -75,7 +75,7 @@ const ModuleManagement = () => {
     const deleteModule = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3005/admin/delete/module/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/module/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

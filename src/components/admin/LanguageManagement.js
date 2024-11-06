@@ -13,7 +13,7 @@ const LanguageManagement = () => {
     const fetchLanguages = async () => {
         try {
             const token = localStorage.getItem("token");
-            const languagesResponse = await axios.get("http://localhost:3005/admin/fetch/languages", {
+            const languagesResponse = await axios.get("https://lomatypeserver.onrender.com/admin/fetch/languages", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -29,7 +29,7 @@ const LanguageManagement = () => {
         try {
             const token = localStorage.getItem("token");
             await axios.post(
-                "http://localhost:3005/admin/create/language",
+                "https://lomatypeserver.onrender.com/admin/create/language",
                 { name: newLanguage },
                 {
                     headers: {
@@ -49,7 +49,7 @@ const LanguageManagement = () => {
         try {
             const token = localStorage.getItem("token");
             await axios.put(
-                `http://localhost:3005/admin/update/language/${id}`,
+                `https://lomatypeserver.onrender.com/admin/update/language/${id}`,
                 { name: editLanguageValue },
                 {
                     headers: {
@@ -69,7 +69,7 @@ const LanguageManagement = () => {
     const removeLanguage = async (id) => {
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`http://localhost:3005/admin/delete/language/${id}`, {
+            await axios.delete(`https://lomatypeserver.onrender.com/admin/delete/language/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

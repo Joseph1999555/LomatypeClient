@@ -23,7 +23,7 @@ const MatchMaking = () => {
 	const [opponentReady, setOpponentReady] = useState(false);
 	const [bothPlayersReady, setBothPlayersReady] = useState(false);
 	const [inputText, setInputText] = useState('');
-	const [countdown, setCountdown] = useState(60); // 60-second timer
+	const [countdown, setCountdown] = useState(6000); // 60-second timer
 	const [matchEnded, setMatchEnded] = useState(false);
 	const jwtToken = localStorage.getItem('token');
 	const user = jwtToken ? jwtDecode(jwtToken) : null;
@@ -48,7 +48,7 @@ const MatchMaking = () => {
 
 	const fetchUserData = async () => {
 		try {
-			const response = await axios.get(`http://localhost:3005/user/fetch/user/${user.id}`, {
+			const response = await axios.get(`https://lomatypeserver.onrender.com/user/fetch/user/${user.id}`, {
 				headers: {
 					Authorization: `Bearer ${jwtToken}`,
 				},
@@ -61,7 +61,7 @@ const MatchMaking = () => {
 
 	useEffect(() => {
 		fetchUserData();
-		const socket = new WebSocket('ws://localhost:3005');
+		const socket = new WebSocket('wss://lomatypeserver.onrender.com');
 
 		socket.onopen = () => {
 			console.log('WebSocket connected');
@@ -69,6 +69,7 @@ const MatchMaking = () => {
 
 		socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
+			console.log('Received message:', data);
 			if (data.event === 'match_found') {
 				setMatchFound(true);
 				setOpponent(data.data);
@@ -86,11 +87,15 @@ const MatchMaking = () => {
 					setPlayer2Input(data.input);
 					console.log('Player 2 typing:', data.input);
 				}
-			} else if (data.event === 'end_match') {
-				if (data.userId === userData.id) {
-					setFinalPlayer1Stats(data.stats); // อัปเดตสถิติของผู้เล่น 1
+			}
+			if (data.event === 'update_final_stats') {
+				// แยกเก็บค่าตาม userId ที่ได้รับ
+				if (data.userId === user.id) {
+					setFinalPlayer1Stats({ wpm: data.wpm, accuracy: data.accuracy });
+					console.log("Updated Final Player 1 Stats:", { wpm: data.wpm, accuracy: data.accuracy });
 				} else {
-					setFinalPlayer2Stats(data.stats); // อัปเดตสถิติของผู้เล่น 2
+					setFinalPlayer2Stats({ wpm: data.wpm, accuracy: data.accuracy });
+					console.log("Updated Final Player 2 Stats:", { wpm: data.wpm, accuracy: data.accuracy });
 				}
 			}
 		};
@@ -119,13 +124,25 @@ const MatchMaking = () => {
 		}
 	}, [countdown, bothPlayersReady, matchEnded]);
 
+	useEffect(() => {
+		if (matchEnded) {
+			console.log("Match ended stats:", finalPlayer1Stats, finalPlayer2Stats);
+		}
+	}, [matchEnded, finalPlayer1Stats, finalPlayer2Stats]);
+
+
 	const endMatch = () => {
 		setMatchEnded(true);
-	
+
+		// ตรวจสอบค่า finalPlayer1Stats และ finalPlayer2Stats
+		console.log("Final Player 1 Stats:", finalPlayer1Stats);
+		console.log("Final Player 2 Stats:", finalPlayer2Stats);
+		console.log("userData:", userData._id);
+
 		const player1Score = finalPlayer1Stats.wpm * (finalPlayer1Stats.accuracy / 100);
 		const player2Score = finalPlayer2Stats.wpm * (finalPlayer2Stats.accuracy / 100);
 		let winner;
-	
+
 		if (player1Score > player2Score) {
 			winner = `${userData.username} wins!`;
 		} else if (player2Score > player1Score) {
@@ -133,11 +150,11 @@ const MatchMaking = () => {
 		} else {
 			winner = 'It\'s a tie!';
 		}
-	
+
 		setMatchResult(`Game Over! ${winner}`);
 		setShowModal(true); // Show modal with match result
-	
-		// Send match statistics to WebSocket server
+
+		// ส่งสถิติการแข่งขันไปยัง WebSocket server
 		if (ws) {
 			ws.send(JSON.stringify({
 				event: 'match_end',
@@ -157,6 +174,7 @@ const MatchMaking = () => {
 			}));
 		}
 	};
+
 
 	const closeModal = () => {
 		setShowModal(false);
@@ -214,13 +232,21 @@ const MatchMaking = () => {
 	const handleKeyDown = (e) => {
 		if (e.key === 'Tab') {
 			e.preventDefault();
-			const { selectionStart, selectionEnd, value } = e.target;
-			const newValue = value.substring(0, selectionStart) + '\t' + value.substring(selectionEnd);
-
-			setInputText(newValue);
+			const { selectionStart, selectionEnd } = e.target;
+			const value = e.target.value;
+	
+			// แทรก tab ที่ตำแหน่ง cursor
+			const newValue = `${value.substring(0, selectionStart)}\t${value.substring(selectionEnd)}`;
+			e.target.value = newValue;
+	
+			// เลื่อนไปข้างหน้าเพื่อให้ cursor อยู่หลัง tab ที่เพิ่มเข้ามา
 			e.target.selectionStart = e.target.selectionEnd = selectionStart + 1;
+			
+			// อัปเดต state ของข้อความที่กรอก
+			setPlayer1Input(newValue);
 		}
 	};
+	
 
 	const compareText = (inputText) => {
 		return snippet.split('').map((char, index) => {
@@ -333,23 +359,25 @@ const MatchMaking = () => {
 				</div>
 			</div>
 			{/* Match End Modal */}
+			{/* Match End Modal */}
 			{showModal && (
 				<div className="modal-overlay">
 					<div className="modal-content">
 						<h2>{matchResult}</h2>
 						<div className="stats">
-							<p><strong>{userData.username}</strong></p>
-							<p>WPM: {player1Stats.wpm}</p>
-							<p>Accuracy: {player1Stats.accuracy}%</p>
+							<p><strong>{userData?.username}</strong></p>
+							<p>WPM: {finalPlayer1Stats.wpm}</p>
+							<p>Accuracy: {finalPlayer1Stats.accuracy}%</p>
 							<p><strong>{opponentName}</strong></p>
-							<p>WPM: {player2Stats.wpm}</p>
-							<p>Accuracy: {player2Stats.accuracy}%</p>
+							<p>WPM: {finalPlayer2Stats.wpm}</p>
+							<p>Accuracy: {finalPlayer2Stats.accuracy}%</p>
 						</div>
 						<button onClick={closeModal}>Close</button>
 					</div>
 				</div>
 			)}
-			<style>{`
+
+<style>{`
 	.match-making-container {
 		display: flex;
 		flex-direction: column;
@@ -580,6 +608,7 @@ const MatchMaking = () => {
 					cursor: pointer;
 				}
 `}</style>
+
 
 		</div>
 	);
