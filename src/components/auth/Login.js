@@ -116,10 +116,10 @@ const Login = () => {
           <button onClick={switchToForgotPassword} className="btn btnLink">Forgot password?</button>
         </p>
       </div>
-          <button onClick={loginWithGoogle} className="btn btnGoogle">
+          {/* <button onClick={loginWithGoogle} className="btn btnGoogle">
           <img src="/asset/google.png" alt="Google Icon" className="googleIcon" />
             Sign in with Google
-          </button>
+          </button> */}
 
 
         </div>
