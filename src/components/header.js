@@ -35,7 +35,7 @@ const Header = () => {
             </div>
             <nav className="nav">
                 <ul>
-                    <li><a onClick={handleNavigateMatchMaking}>Match Making</a></li>
+                    <li><a onClick={handleNavigateMatchMaking}>Match Making(Alpha Testing)</a></li>
                     <li><a onClick={handleNavigateTypingPractice}>Typing Practice</a></li>
                     <li><a onClick={handleNavigateResults}>Summary</a></li>
                     <li><a onClick={handleNavigateLeaderboard}>Leader Board</a></li>

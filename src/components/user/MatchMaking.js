@@ -23,7 +23,7 @@ const MatchMaking = () => {
 	const [opponentReady, setOpponentReady] = useState(false);
 	const [bothPlayersReady, setBothPlayersReady] = useState(false);
 	const [inputText, setInputText] = useState('');
-	const [countdown, setCountdown] = useState(6000); // 60-second timer
+	const [countdown, setCountdown] = useState(60); // 60-second timer
 	const [matchEnded, setMatchEnded] = useState(false);
 	const jwtToken = localStorage.getItem('token');
 	const user = jwtToken ? jwtDecode(jwtToken) : null;
@@ -285,9 +285,9 @@ const MatchMaking = () => {
 			<div className="match-making">
 				<h1>Match Making</h1>
 				{!isMatching && !matchFound && (
-					<button onClick={startMatching}>เริ่มการจับคู่</button>
+					<button onClick={startMatching}>Find Player</button>
 				)}
-				{isMatching && <p>กำลังค้นหาคู่แข่งขัน...</p>}
+				{isMatching && <p>Finding Player...</p>}
 				{error && <p style={{ color: 'red' }}>{error}</p>}
 			</div>
 			<div className="matchmaking">
@@ -296,12 +296,11 @@ const MatchMaking = () => {
 					<div className="code-snippet">
 						{/* <pre>{snippet}</pre> */}
 						<p style={countdownStyle}>Time Remaining: {countdown}s</p>
-						<p>START</p>
 					</div>
 				) : (
 					<div>
-						<button onClick={handleReady} disabled={isPlayerReady}>พร้อม</button>
-						{isPlayerReady && <p>รอคู่แข่งพร้อม...</p>}
+						<button onClick={handleReady} disabled={isPlayerReady}>Ready</button>
+						{isPlayerReady && <p>Waiting Opponent Ready...</p>}
 					</div>
 				)}
 				<div className="players">
@@ -324,7 +323,7 @@ const MatchMaking = () => {
 							</div>
 						) : (
 							<div>
-								{isPlayerReady && <p>รอคู่แข่งพร้อม...</p>}
+								{isPlayerReady && <p>Waiting Opponent Ready...</p>}
 							</div>
 						)}
 						{/* <p>WPM: {player1Stats.wpm}</p>
@@ -350,7 +349,7 @@ const MatchMaking = () => {
 							</div>
 						) : (
 							<div>
-								{isPlayerReady && <p>รอคู่แข่งพร้อม...</p>}
+								{isPlayerReady && <p>Waiting Opponent Ready...</p>}
 							</div>
 						)}
 						{/* <p>WPM: {player2Stats.wpm}</p>
@@ -503,6 +502,7 @@ const MatchMaking = () => {
 		font-family: 'Courier New', Courier, monospace;
 		line-height: 1.5;
 		color: transparent;
+   	 	caret-color: black;
 	}
 
 	.formatted-text {
