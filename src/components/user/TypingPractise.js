@@ -41,7 +41,7 @@ const TypingPractice = ({ selectedLanguage, selectedType, setSelectedLanguage, s
       setSnippetId(response.data._id);
       setInputText(''); // ล้าง inputText
       setTimeElapsed(0); // รีเซ็ตเวลา
-      setTimeLeft(180); // รีเซ็ตเวลานับถอยหลัง
+      setTimeLeft(30); // รีเซ็ตเวลานับถอยหลัง
       setTimerStarted(false); // รีเซ็ตการจับเวลา
 
       console.log('Snippet fetched:', snippet);
