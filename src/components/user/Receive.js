@@ -32,6 +32,12 @@ const Welcome = () => {
                     padding-left: 40px; /* Add space from the left edge */
                 }
 
+                .logo {
+                    width: 350px; /* Set logo size */
+                    height: auto;
+                    margin-bottom: 20px; /* Space between logo and title */
+                }
+
                 .welcome-title {
                     font-size: 3rem;
                     color: #2e4a62; /* Change to dark blue */
@@ -75,6 +81,12 @@ const Welcome = () => {
                 }
             `}</style>
             <div className="welcome-container">
+                {/* Logo */}
+                <img 
+                    src="/asset/loma02.png" // Replace with the correct path to your logo
+                    alt="LomaType Logo" 
+                    className="logo" 
+                />
                 <h1 className="welcome-title">Welcome to LomaType</h1>
                 <p className="welcome-description">
                     A touch typing website for programming languages that helps you practice and improve your coding speed.
