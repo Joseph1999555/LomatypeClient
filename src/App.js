@@ -17,6 +17,7 @@ function App() {
         >
           Learn React
         </a>
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="2/EumBNvEjSv8MdQjjdPHA" async></script>
       </header>
     </div>
   );
