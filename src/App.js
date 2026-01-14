@@ -5,6 +5,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="2/EumBNvEjSv8MdQjjdPHA" async></script>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,7 +18,6 @@ function App() {
         >
           Learn React
         </a>
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="2/EumBNvEjSv8MdQjjdPHA" async></script>
       </header>
     </div>
   );
